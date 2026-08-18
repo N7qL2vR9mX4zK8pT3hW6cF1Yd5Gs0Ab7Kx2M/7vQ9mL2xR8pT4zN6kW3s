@@ -1,927 +1,248 @@
-local a = {
-	b = game:GetService("Players"),
-	c = game:GetService("ReplicatedStorage"),
-	d = game:GetService("RunService"),
-	e = game:GetService("TweenService"),
-	f = game:GetService("UserInputService"),
-	g = game:GetService("CoreGui"),
-	h = game:GetService("VirtualInputManager"),
-	i = game:GetService("VirtualUser"),
-	j = game:GetService("Lighting"),
-	k = game:GetService("Workspace"),
-	l = game:GetService("MaterialService"),
-	m = game:GetService("SoundService"),
-	n = game:GetService("ReplicatedFirst"),
-	o = game:GetService("Stats")
+local Services = {
+	Players = game:GetService("Players"),
+	ReplicatedStorage = game:GetService("ReplicatedStorage"),
+	RunService = game:GetService("RunService"),
+	VirtualInputManager = game:GetService("VirtualInputManager"),
+	VirtualUser = game:GetService("VirtualUser"),
+	TeleportService = game:GetService("TeleportService"),
+	Workspace = game:GetService("Workspace"),
+	Lighting = game:GetService("Lighting"),
+	MaterialService = game:GetService("MaterialService"),
+	SoundService = game:GetService("SoundService"),
+	ReplicatedFirst = game:GetService("ReplicatedFirst")
 }
 
-local p = {
-	q = a.b.LocalPlayer,
-	r = a.b.LocalPlayer.DisplayName
+local PlayerData = {
+	LocalPlayer = Services.Players.LocalPlayer
 }
 
-local s = {
-	t = Color3.fromRGB(0, 0, 0),
-	u = Color3.fromRGB(12, 12, 12),
-	v = Color3.fromRGB(8, 8, 8),
-	w = Color3.fromRGB(22, 22, 22),
-	x = Color3.fromRGB(38, 38, 38),
-	y = Color3.fromRGB(18, 18, 18),
-	z = Color3.fromRGB(0, 0, 0),
-	ba = Color3.fromRGB(160, 160, 160),
-	bb = Color3.fromRGB(32, 32, 32),
-	bc = Color3.fromRGB(180, 180, 180),
-	bd = Color3.fromRGB(140, 140, 140),
-	be = Color3.fromRGB(110, 110, 110),
-	bf = Color3.fromRGB(55, 55, 55),
-	bg = Color3.fromRGB(42, 42, 42),
-	bh = Color3.fromRGB(35, 35, 35),
-	bi = Color3.fromRGB(130, 130, 130),
-	bj = Color3.fromRGB(190, 190, 190),
-	bk = Enum.Font.PermanentMarker
-}
-
-local bl = {
-	bm = 12,
-	bn = 8,
-	bo = 520,
-	bp = 380,
-	bq = 42,
-	br = 48,
-	bs = 24,
-	bt = 118
-}
-
-local bu = {}
-
-function bu.bv(bw, bx)
-	local by = Instance.new(bw)
-	for bz, ca in pairs(bx or {}) do
-		by[bz] = ca
-	end
-	return by
+local function getHumanoidRootPart()
+	local character = PlayerData.LocalPlayer.Character or PlayerData.LocalPlayer.CharacterAdded:Wait()
+	return character:WaitForChild("HumanoidRootPart")
 end
 
-function bu.cb(cc, cd)
-	return bu.bv("UICorner", {
-		Parent = cc,
-		CornerRadius = UDim.new(0, cd or bl.bn)
-	})
-end
-
-function bu.ce(cf, cg, ch)
-	return bu.bv("UIStroke", {
-		Parent = cf,
-		Color = cg or s.bf,
-		Thickness = ch or 1,
-		Transparency = 0.45
-	})
-end
-
-function bu.ci(cj)
-	cj = math.max(0, math.floor(cj))
-	local ck = math.floor(cj / 86400)
-	local cl = math.floor((cj % 86400) / 3600)
-	local cm = math.floor((cj % 3600) / 60)
-	local cn = cj % 60
-	return string.format("%dD / %dH / %dM / %dS", ck, cl, cm, cn)
-end
-
-function bu.co(cp)
-	local cq = cp < 0
-	cp = math.abs(cp)
-	local cr = {
-		{1e18, "Qi"},
-		{1e15, "Qa"},
-		{1e12, "T"},
-		{1e9, "B"},
-		{1e6, "M"}
-	}
-	for _, cs in ipairs(cr) do
-		local ct, cu = cs[1], cs[2]
-		if cp >= ct then
-			local cv = cp / ct
-			if cu == "Qi" or cu == "Qa" then
-				return (cq and "-" or "") .. string.format("%.2f%s", cv, cu)
-			else
-				return (cq and "-" or "") .. string.format("%.1f%s", cv, cu)
-			end
-		end
-	end
-	return (cq and "-" or "") .. string.format("%.0f", cp)
-end
-
-local cw = {}
-cw.__index = cw
-
-function cw.cx(cy)
-	cy = cy or {}
-	local cz = setmetatable({}, cw)
-	cz.da = {}
-	cz.db = {}
-	cz.dc = 1
-	local dd = bu.bv("ScreenGui", {
-		Name = cy.Name or "T",
-		ResetOnSpawn = false,
-		Parent = a.g,
-		ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-	})
-	cz.de = dd
-	local df = bu.bv("TextButton", {
-		Parent = dd,
-		Size = UDim2.fromOffset(46, 46),
-		Position = UDim2.new(0.04, 0, 0.12, 0),
-		BackgroundColor3 = s.u,
-		BackgroundTransparency = 0.2,
-		Text = "",
-		AutoButtonColor = false,
-		BorderSizePixel = 0
-	})
-	bu.cb(df, 14)
-	bu.ce(df, s.ba, 1.5)
-	bu.bv("TextLabel", {
-		Parent = df,
-		Size = UDim2.fromScale(1, 1),
-		BackgroundTransparency = 1,
-		Text = cy.ToggleLabel or "TXM",
-		Font = s.bk,
-		TextSize = 14,
-		TextColor3 = s.ba
-	})
-	local dg, dh, di, dj = false, nil, nil, false
-	df.InputBegan:Connect(function(dk)
-		if dk.UserInputType == Enum.UserInputType.MouseButton1 or dk.UserInputType == Enum.UserInputType.Touch then
-			dg = true
-			dj = false
-			dh = dk.Position
-			di = df.Position
-		end
-	end)
-	df.InputEnded:Connect(function(dl)
-		if dl.UserInputType == Enum.UserInputType.MouseButton1 or dl.UserInputType == Enum.UserInputType.Touch then
-			dg = false
-		end
-	end)
-	local dm = cy.Width or 520
-	local dn = cy.Height or 380
-	local do_ = bu.bv("Frame", {
-		Parent = dd,
-		Size = UDim2.fromOffset(dm, dn),
-		Position = UDim2.new(0.5, -dm / 2, 0.5, -dn / 2),
-		BackgroundColor3 = s.t,
-		BackgroundTransparency = 0.12,
-		BorderSizePixel = 0,
-		Active = true,
-		ClipsDescendants = true
-	})
-	bu.cb(do_, bl.bm)
-	bu.ce(do_, s.bg, 1)
-	cz.dp = do_
-	local dq = typeof(cy.BackgroundImage) == "string" and cy.BackgroundImage ~= ""
-	if dq then
-		local dr = bu.bv("ImageLabel", {
-			Parent = do_,
-			Name = "CustomBackground",
-			Size = UDim2.fromScale(1, 1),
-			BackgroundTransparency = 1,
-			Image = cy.BackgroundImage,
-			ScaleType = Enum.ScaleType.Crop,
-			ZIndex = 0,
-			ImageTransparency = cy.BackgroundTransparency or 0
-		})
-		bu.cb(dr, bl.bm)
-		local ds = bu.bv("Frame", {
-			Parent = do_,
-			Name = "BgOverlay",
-			Size = UDim2.fromScale(1, 1),
-			BackgroundColor3 = Color3.fromRGB(0, 0, 0),
-			BackgroundTransparency = cy.OverlayTransparency or 0.52,
-			BorderSizePixel = 0,
-			ZIndex = 1
-		})
-		bu.cb(ds, bl.bm)
-	end
-	local dt = bu.bv("Frame", {
-		Parent = do_,
-		Size = UDim2.new(1, 0, 0, bl.bq),
-		BackgroundColor3 = s.u,
-		BackgroundTransparency = dq and 0.42 or 0.2,
-		BorderSizePixel = 0,
-		ZIndex = 2
-	})
-	bu.cb(dt, bl.bm)
-	bu.bv("TextLabel", {
-		Parent = dt,
-		Size = UDim2.new(1, -20, 1, 0),
-		Position = UDim2.fromOffset(16, 0),
-		BackgroundTransparency = 1,
-		Text = cy.Title or "Hub",
-		TextColor3 = s.bc,
-		Font = s.bk,
-		TextSize = 18,
-		TextXAlignment = Enum.TextXAlignment.Left,
-		ZIndex = 3
-	})
-	local du = bu.bv("Frame", {
-		Parent = do_,
-		Size = UDim2.new(0, bl.bt, 1, -(bl.bq + bl.br + bl.bs)),
-		Position = UDim2.fromOffset(0, bl.bq),
-		BackgroundColor3 = s.v,
-		BackgroundTransparency = dq and 0.42 or 0.2,
-		BorderSizePixel = 0,
-		ZIndex = 2
-	})
-	local dv = bu.bv("Frame", {
-		Parent = du,
-		Size = UDim2.fromOffset(3, 28),
-		Position = UDim2.fromOffset(0, 10),
-		BackgroundColor3 = s.ba,
-		BorderSizePixel = 0,
-		ZIndex = 3
-	})
-	bu.cb(dv, 2)
-	cz.dw = dv
-	local dx = bu.bv("ScrollingFrame", {
-		Parent = du,
-		Size = UDim2.new(1, -4, 1, 0),
-		Position = UDim2.fromOffset(4, 0),
-		BackgroundTransparency = 1,
-		ScrollBarThickness = 0,
-		AutomaticCanvasSize = Enum.AutomaticSize.Y,
-		CanvasSize = UDim2.new(),
-		BorderSizePixel = 0,
-		ZIndex = 3
-	})
-	bu.bv("UIListLayout", {Parent = dx, Padding = UDim.new(0, 5)})
-	bu.bv("UIPadding", {Parent = dx, PaddingTop = UDim.new(0, 10)})
-	cz.dy = dx
-	local dz = bu.bv("Frame", {
-		Parent = do_,
-		Size = UDim2.new(1, -(bl.bt + 6), 1, -(bl.bq + bl.br + bl.bs)),
-		Position = UDim2.fromOffset(bl.bt + 6, bl.bq),
-		BackgroundTransparency = 1,
-		BorderSizePixel = 0,
-		ZIndex = 2
-	})
-	cz.ea = dz
-	local eb = bu.bv("Frame", {
-		Parent = do_,
-		Size = UDim2.new(1, 0, 0, bl.br),
-		Position = UDim2.new(0, 0, 1, -(bl.br + bl.bs)),
-		BackgroundColor3 = s.u,
-		BackgroundTransparency = dq and 0.42 or 0.2,
-		BorderSizePixel = 0,
-		ZIndex = 2
-	})
-	local ec = bu.bv("ImageLabel", {
-		Parent = eb,
-		Size = UDim2.fromOffset(32, 32),
-		Position = UDim2.new(0, 14, 0.5, -16),
-		BackgroundColor3 = s.y,
-		BackgroundTransparency = 0.25,
-		Image = cy.AvatarImage or "",
-		BorderSizePixel = 0,
-		ZIndex = 3
-	})
-	bu.cb(ec, 16)
-	bu.ce(ec, s.bf, 1)
-	bu.bv("TextLabel", {
-		Parent = eb,
-		Size = UDim2.new(1, -60, 1, 0),
-		Position = UDim2.fromOffset(54, 0),
-		BackgroundTransparency = 1,
-		Text = cy.FooterText or "",
-		TextColor3 = s.bc,
-		Font = s.bk,
-		TextSize = 14,
-		TextXAlignment = Enum.TextXAlignment.Left,
-		ZIndex = 3
-	})
-	local ed = bu.bv("Frame", {
-		Parent = do_,
-		Size = UDim2.new(1, 0, 0, bl.bs),
-		Position = UDim2.new(0, 0, 1, -bl.bs),
-		BackgroundColor3 = s.z,
-		BackgroundTransparency = dq and 0.42 or 0.2,
-		BorderSizePixel = 0,
-		ZIndex = 2
-	})
-	bu.cb(ed, bl.bm)
-	local ee = bu.bv("TextLabel", {
-		Parent = ed,
-		Size = UDim2.fromScale(1, 1),
-		BackgroundTransparency = 1,
-		Text = bu.ci(0),
-		TextColor3 = s.ba,
-		Font = s.bk,
-		TextSize = 15,
-		ZIndex = 3
-	})
-	cz.ef = ee
-	local eg = os.clock()
-	local eh = 0
-	a.d.Heartbeat:Connect(function(ei)
-		eh += ei
-		if eh >= 1 then
-			eh -= 1
-			ee.Text = bu.ci(os.clock() - eg)
-		end
-	end)
-	local ej = bu.bv("TextButton", {
-		Parent = do_,
-		Size = UDim2.fromOffset(18, 18),
-		Position = UDim2.new(1, -18, 1, -18),
-		BackgroundTransparency = 1,
-		Text = "",
-		ZIndex = 10,
-		AutoButtonColor = false
-	})
-	local ek = true
-	df.MouseButton1Click:Connect(function()
-		if dj then return end
-		ek = not ek
-		do_.Visible = ek
-	end)
-	local el, em, en = false, nil, nil
-	local eo, ep, eq = false, nil, nil
-	local function er(es)
-		if es.UserInputType == Enum.UserInputType.MouseButton1 or es.UserInputType == Enum.UserInputType.Touch then
-			el = true
-			em = es.Position
-			en = do_.Position
-		end
-	end
-	local function et(eu)
-		if eu.UserInputType == Enum.UserInputType.MouseButton1 or eu.UserInputType == Enum.UserInputType.Touch then
-			el = false
-		end
-	end
-	for _, ev in ipairs({dt, du, dx, dz, eb, ed}) do
-		ev.InputBegan:Connect(er)
-		ev.InputEnded:Connect(et)
-	end
-	ej.InputBegan:Connect(function(ew)
-		if ew.UserInputType == Enum.UserInputType.MouseButton1 or ew.UserInputType == Enum.UserInputType.Touch then
-			eo = true
-			ep = ew.Position
-			eq = do_.Size
-		end
-	end)
-	ej.InputEnded:Connect(function(ex)
-		if ex.UserInputType == Enum.UserInputType.MouseButton1 or ex.UserInputType == Enum.UserInputType.Touch then
-			eo = false
-		end
-	end)
-	a.f.InputChanged:Connect(function(ey)
-		if ey.UserInputType ~= Enum.UserInputType.MouseMovement and ey.UserInputType ~= Enum.UserInputType.Touch then return end
-		if el then
-			local ez = ey.Position - em
-			do_.Position = UDim2.new(
-				en.X.Scale, en.X.Offset + ez.X,
-				en.Y.Scale, en.Y.Offset + ez.Y
-			)
-		elseif eo then
-			local fa = ey.Position - ep
-			do_.Size = UDim2.new(
-				eq.X.Scale, math.max(bl.bo, eq.X.Offset + fa.X),
-				eq.Y.Scale, math.max(bl.bp, eq.Y.Offset + fa.Y)
-			)
-		elseif dg then
-			local fb = ey.Position - dh
-			if math.abs(fb.X) > 3 or math.abs(fb.Y) > 3 then
-				dj = true
-			end
-			df.Position = UDim2.new(
-				di.X.Scale, di.X.Offset + fb.X,
-				di.Y.Scale, di.Y.Offset + fb.Y
-			)
-		end
-	end)
-	cz.fc = er
-	cz.fd = et
-	return cz
-end
-
-local fe = {}
-fe.__index = fe
-
-function cw:ff(fg)
-	local fh = #self.da + 1
-	local fi = bu.bv("TextButton", {
-		Parent = self.dy,
-		Size = UDim2.new(1, -8, 0, 32),
-		BackgroundColor3 = s.w,
-		BackgroundTransparency = 1,
-		Text = "  " .. fg,
-		TextColor3 = s.bd,
-		Font = s.bk,
-		TextSize = 14,
-		TextXAlignment = Enum.TextXAlignment.Left,
-		AutoButtonColor = false,
-		BorderSizePixel = 0
-	})
-	bu.cb(fi, 8)
-	fi.MouseEnter:Connect(function()
-		if fi.BackgroundTransparency == 1 then
-			a.e:Create(fi, TweenInfo.new(0.12), {
-				BackgroundTransparency = 0.35,
-				BackgroundColor3 = s.x
-			}):Play()
-		end
-	end)
-	fi.MouseLeave:Connect(function()
-		if fi.TextColor3 ~= s.bc then
-			a.e:Create(fi, TweenInfo.new(0.12), {
-				BackgroundTransparency = 1
-			}):Play()
-		end
-	end)
-	local fj = bu.bv("Frame", {
-		Parent = self.ea,
-		Size = UDim2.fromScale(1, 1),
-		BackgroundTransparency = 1,
-		Visible = fh == 1,
-		BorderSizePixel = 0
-	})
-	local fk = bu.bv("ScrollingFrame", {
-		Parent = fj,
-		Size = UDim2.new(1, -14, 1, 0),
-		Position = UDim2.new(0, 7, 0, 0),
-		BackgroundTransparency = 1,
-		ScrollBarThickness = 3,
-		ScrollBarImageColor3 = s.ba,
-		AutomaticCanvasSize = Enum.AutomaticSize.Y,
-		CanvasSize = UDim2.new(),
-		BorderSizePixel = 0
-	})
-	bu.bv("UIListLayout", {Parent = fk, Padding = UDim.new(0, 7)})
-	bu.bv("UIPadding", {
-		Parent = fk,
-		PaddingTop = UDim.new(0, 12),
-		PaddingLeft = UDim.new(0, 10),
-		PaddingRight = UDim.new(0, 6)
-	})
-	if self.fc then
-		for _, fl in ipairs({fk, fj}) do
-			fl.InputBegan:Connect(self.fc)
-			fl.InputEnded:Connect(self.fd)
-		end
-	end
-	table.insert(self.da, {Button = fi, Page = fj})
-	table.insert(self.db, 10 + (fh - 1) * 37)
-	fi.MouseButton1Click:Connect(function()
-		self:fm(fh)
-	end)
-	return setmetatable({
-		fn = fk,
-		fo = fj,
-		fp = self
-	}, fe)
-end
-
-function cw:fm(fq)
-	self.dc = fq
-	for fr, fs in ipairs(self.da) do
-		fs.Page.Visible = (fr == fq)
-		if fr == fq then
-			a.e:Create(fs.Button, TweenInfo.new(0.15), {
-				BackgroundTransparency = 0.22,
-				BackgroundColor3 = s.bb,
-				TextColor3 = s.bc
-			}):Play()
-		else
-			a.e:Create(fs.Button, TweenInfo.new(0.15), {
-				BackgroundTransparency = 1,
-				TextColor3 = s.bd
-			}):Play()
-		end
-	end
-	a.e:Create(self.dw, TweenInfo.new(0.18), {
-		Position = UDim2.fromOffset(0, self.db[fq] or 10)
-	}):Play()
-end
-
-function fe:ft(fu)
-	return bu.bv("TextLabel", {
-		Parent = self.fn,
-		Size = UDim2.new(1, 0, 0, 20),
-		BackgroundTransparency = 1,
-		Text = fu,
-		TextColor3 = s.ba,
-		Font = s.bk,
-		TextSize = 15,
-		TextXAlignment = Enum.TextXAlignment.Left
-	})
-end
-
-function fe:fv(fw, fx)
-	local fy = bu.bv("TextButton", {
-		Parent = self.fn,
-		Size = UDim2.new(1, 0, 0, 34),
-		BackgroundColor3 = s.w,
-		BackgroundTransparency = 0.40,
-		Text = fw,
-		TextColor3 = s.bc,
-		Font = s.bk,
-		TextSize = 14,
-		AutoButtonColor = false,
-		BorderSizePixel = 0
-	})
-	bu.cb(fy, 8)
-	bu.ce(fy, s.bf, 1)
-	fy.MouseEnter:Connect(function()
-		a.e:Create(fy, TweenInfo.new(0.12), {
-			BackgroundTransparency = 0.22,
-			BackgroundColor3 = s.x
-		}):Play()
-	end)
-	fy.MouseLeave:Connect(function()
-		a.e:Create(fy, TweenInfo.new(0.12), {
-			BackgroundTransparency = 0.40,
-			BackgroundColor3 = s.w
-		}):Play()
-	end)
-	fy.Activated:Connect(function()
-		if fx then fx() end
-	end)
-	return fy
-end
-
-function fe:fz(ga, gb)
-	local gc = bu.bv("TextButton", {
-		Parent = self.fn,
-		Size = UDim2.new(1, 0, 0, 34),
-		BackgroundColor3 = s.w,
-		BackgroundTransparency = 0.40,
-		Text = "",
-		AutoButtonColor = false,
-		BorderSizePixel = 0
-	})
-	bu.cb(gc, 8)
-	bu.ce(gc, s.bf, 1)
-	bu.bv("TextLabel", {
-		Parent = gc,
-		Size = UDim2.new(1, -54, 1, 0),
-		Position = UDim2.fromOffset(14, 0),
-		BackgroundTransparency = 1,
-		Text = ga,
-		TextColor3 = s.bc,
-		Font = s.bk,
-		TextSize = 14,
-		TextXAlignment = Enum.TextXAlignment.Left
-	})
-	local gd = bu.bv("Frame", {
-		Parent = gc,
-		Size = UDim2.fromOffset(36, 18),
-		Position = UDim2.new(1, -48, 0.5, -9),
-		BackgroundColor3 = s.bh,
-		BackgroundTransparency = 0.15,
-		BorderSizePixel = 0
-	})
-	bu.cb(gd, 9)
-	local ge = bu.bv("Frame", {
-		Parent = gd,
-		Size = UDim2.fromOffset(14, 14),
-		Position = UDim2.fromOffset(2, 2),
-		BackgroundColor3 = s.bi,
-		BorderSizePixel = 0
-	})
-	bu.cb(ge, 7)
-	local gf = false
-	gc.Activated:Connect(function()
-		gf = not gf
-		if gf then
-			a.e:Create(gd, TweenInfo.new(0.15), {BackgroundColor3 = s.ba}):Play()
-			a.e:Create(ge, TweenInfo.new(0.15), {
-				Position = UDim2.fromOffset(20, 2),
-				BackgroundColor3 = s.bj
-			}):Play()
-		else
-			a.e:Create(gd, TweenInfo.new(0.15), {BackgroundColor3 = s.bh}):Play()
-			a.e:Create(ge, TweenInfo.new(0.15), {
-				Position = UDim2.fromOffset(2, 2),
-				BackgroundColor3 = s.bi
-			}):Play()
-		end
-		if gb then gb(gf) end
-	end)
-	return gc
-end
-
-local gg = cw.cx({
-	Title = p.r .. " On TOP",
-	FooterText = "Made By Tree",
-	AvatarImage = "rbxthumb://type=AvatarHeadShot&id=" .. p.q.UserId .. "&w=150&h=150",
-	Width = 520,
-	Height = 380,
-	ToggleLabel = "T",
-	BackgroundImage = "rbxassetid://110915576331965",
-	OverlayTransparency = 0.52,
-	BackgroundTransparency = 0
-})
-
-local gh = {
-	gi = gg:ff("Farming"),
-	gj = gg:ff("Stats")
-}
-
-local function gk()
-	local gl = p.q.Character or p.q.CharacterAdded:Wait()
-	return gl:WaitForChild("HumanoidRootPart")
-end
-
-local function gm()
-	local gn = gk()
-	gn.CFrame = CFrame.new(-8372, 7, 2859)
-	task.wait(0.25)
-	a.h:SendKeyEvent(true, Enum.KeyCode.E, false, game)
+local function teleportAndPressE()
+	local rootPart = getHumanoidRootPart()
+	rootPart.CFrame = CFrame.new(-8372, 7, 2859)
+	task.wait(0.2)
+	Services.VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.E, false, game)
 	task.wait(0.01)
-	a.h:SendKeyEvent(false, Enum.KeyCode.E, false, game)
+	Services.VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.E, false, game)
 end
 
-local function go()
-	local gp = p.q:FindFirstChild("petsFolder")
-	if not gp then return end
-	for _, gq in pairs(gp:GetChildren()) do
-		if gq:IsA("Folder") then
-			for _, gr in pairs(gq:GetChildren()) do
+local function unequipAllPets()
+	local petsFolder = PlayerData.LocalPlayer:FindFirstChild("petsFolder")
+	if not petsFolder then return end
+	for _, folder in pairs(petsFolder:GetChildren()) do
+		if folder:IsA("Folder") then
+			for _, pet in pairs(folder:GetChildren()) do
 				pcall(function()
-					a.c.rEvents.equipPetEvent:FireServer("unequipPet", gr)
+					Services.ReplicatedStorage.rEvents.equipPetEvent:FireServer("unequipPet", pet)
 				end)
 			end
 		end
 	end
 end
 
-local function gs(gt, gu)
-	go()
-	local gv = p.q.petsFolder and p.q.petsFolder:FindFirstChild("Unique")
-	if not gv then return end
-	local gw = 0
-	gu = gu or 8
-	for _, gx in pairs(gv:GetChildren()) do
-		if gx.Name == gt and gw < gu then
+local function equipPetsByName(petName, maxCount)
+	unequipAllPets()
+	local uniqueFolder = PlayerData.LocalPlayer.petsFolder and PlayerData.LocalPlayer.petsFolder:FindFirstChild("Unique")
+	if not uniqueFolder then return end
+	local equippedCount = 0
+	maxCount = maxCount or 8
+	for _, pet in pairs(uniqueFolder:GetChildren()) do
+		if pet.Name == petName and equippedCount < maxCount then
 			pcall(function()
-				a.c.rEvents.equipPetEvent:FireServer("equipPet", gx)
+				Services.ReplicatedStorage.rEvents.equipPetEvent:FireServer("equipPet", pet)
 			end)
-			gw += 1
+			equippedCount += 1
 		end
 	end
 end
 
-local function gy()
-	local gz = p.q
-	if not gz then return end
-	local ha = gz:FindFirstChildOfClass("PlayerGui") or gz:WaitForChild("PlayerGui", 5)
-	local hb = gz.Character
-	local function hc(hd)
-		if not hd then return true end
-		if hd == gz or hd:IsDescendantOf(gz) then return true end
-		if ha and (hd == ha or hd:IsDescendantOf(ha)) then return true end
-		if hb and (hd == hb or hd:IsDescendantOf(hb)) then return true end
-		local he = tostring(hd.Name)
-		if he == "rEvents"
-			or he == "equipPetEvent"
-			or he == "muscleEvent"
-			or he == "Protein Egg"
-			or he == "petsFolder"
-			or he == "Unique"
-			or he == "leaderstats"
-			or he == "Strength"
-			or he == "Durability"
-			or he == "boostTimersFolder"
-			or he == "OptimizationOverlay"
-			or he == "T" then
+local function optimizeGame()
+	local player = PlayerData.LocalPlayer
+	if not player then return end
+	local playerGui = player:FindFirstChildOfClass("PlayerGui") or player:WaitForChild("PlayerGui", 5)
+	local character = player.Character
+	local function shouldKeep(instance)
+		if not instance then return true end
+		if instance == player or instance:IsDescendantOf(player) then return true end
+		if playerGui and (instance == playerGui or instance:IsDescendantOf(playerGui)) then return true end
+		if character and (instance == character or instance:IsDescendantOf(character)) then return true end
+		local name = tostring(instance.Name)
+		if name == "rEvents"
+			or name == "equipPetEvent"
+			or name == "muscleEvent"
+			or name == "Protein Egg"
+			or name == "petsFolder"
+			or name == "Unique"
+			or name == "OptimizationOverlay" then
 			return true
 		end
-		if hd:IsA("RemoteEvent") or hd:IsA("RemoteFunction") or hd:IsA("BindableEvent") then
+		if instance:IsA("RemoteEvent") or instance:IsA("RemoteFunction") or instance:IsA("BindableEvent") then
 			return true
 		end
-		if hd:IsDescendantOf(a.c) and (he:find("Event") or he:find("Remote") or he == "rEvents") then
+		if instance:IsDescendantOf(Services.ReplicatedStorage) and (name:find("Event") or name:find("Remote") or name == "rEvents") then
 			return true
 		end
 		return false
 	end
-	local function hf(hg)
-		if not hg then return end
-		local hh = {}
-		local function hi(hj)
-			local hk = hj
-			while hk and hk ~= game do
-				hh[hk] = true
-				hk = hk.Parent
+	local function destroyUnnecessary(container)
+		if not container then return end
+		local keep = {}
+		local function markAncestors(obj)
+			local current = obj
+			while current and current ~= game do
+				keep[current] = true
+				current = current.Parent
 			end
 		end
-		for _, hl in ipairs(hg:GetDescendants()) do
-			if hc(hl) then
-				hi(hl)
+		for _, descendant in ipairs(container:GetDescendants()) do
+			if shouldKeep(descendant) then
+				markAncestors(descendant)
 			end
 		end
-		for _, hm in ipairs(hg:GetDescendants()) do
-			if not hh[hm] then
+		for _, descendant in ipairs(container:GetDescendants()) do
+			if not keep[descendant] then
 				pcall(function()
-					hm:Destroy()
+					descendant:Destroy()
 				end)
 			end
 		end
 	end
-	hf(a.j)
+	destroyUnnecessary(Services.Lighting)
 	pcall(function()
-		a.j.GlobalShadows = false
-		a.j.FogStart = 9e9
-		a.j.FogEnd = 9e9
-		a.j.Brightness = 0
-		a.j.EnvironmentDiffuseScale = 0
-		a.j.EnvironmentSpecularScale = 0
-		a.j.ExposureCompensation = -20
+		Services.Lighting.GlobalShadows = false
+		Services.Lighting.FogStart = 9e9
+		Services.Lighting.FogEnd = 9e9
+		Services.Lighting.Brightness = 0
+		Services.Lighting.EnvironmentDiffuseScale = 0
+		Services.Lighting.EnvironmentSpecularScale = 0
+		Services.Lighting.ExposureCompensation = -20
 	end)
-	hf(a.l)
-	for _, hn in ipairs(a.m:GetDescendants()) do
+	destroyUnnecessary(Services.MaterialService)
+	for _, sound in ipairs(Services.SoundService:GetDescendants()) do
 		pcall(function()
-			if hn:IsA("Sound") then
-				hn:Stop()
-				hn.Volume = 0
+			if sound:IsA("Sound") then
+				sound:Stop()
+				sound.Volume = 0
 			end
 		end)
 	end
-	hf(a.m)
-	pcall(function() a.k.Terrain:Clear() end)
-	hf(a.k)
-	task.wait(0.25)
-	hf(a.k)
-	hf(a.c)
-	hf(a.n)
-	pcall(function() a.d:Set3dRenderingEnabled(false) end)
-	local ho = ha and ha:FindFirstChild("OptimizationOverlay")
-	if ho then ho:Destroy() end
-	if ha then
-		local hp = Instance.new("ScreenGui")
-		hp.Name = "OptimizationOverlay"
-		hp.IgnoreGuiInset = true
-		hp.DisplayOrder = 2147483647
-		hp.ResetOnSpawn = false
-		hp.ZIndexBehavior = Enum.ZIndexBehavior.Global
-		hp.Parent = ha
-		local hq = Instance.new("Frame")
-		hq.Size = UDim2.fromScale(1, 1)
-		hq.BackgroundColor3 = Color3.new(0, 0, 0)
-		hq.BorderSizePixel = 0
-		hq.ZIndex = 2147483647
-		hq.Parent = hp
+	destroyUnnecessary(Services.SoundService)
+	pcall(function() Services.Workspace.Terrain:Clear() end)
+	destroyUnnecessary(Services.Workspace)
+	task.wait(1)
+	destroyUnnecessary(Services.Workspace)
+	destroyUnnecessary(Services.ReplicatedStorage)
+	destroyUnnecessary(Services.ReplicatedFirst)
+	pcall(function() Services.RunService:Set3dRenderingEnabled(false) end)
+	local existingOverlay = playerGui and playerGui:FindFirstChild("OptimizationOverlay")
+	if existingOverlay then existingOverlay:Destroy() end
+	if playerGui then
+		local overlayGui = Instance.new("ScreenGui")
+		overlayGui.Name = "OptimizationOverlay"
+		overlayGui.IgnoreGuiInset = true
+		overlayGui.DisplayOrder = 2147483647
+		overlayGui.ResetOnSpawn = false
+		overlayGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+		overlayGui.Parent = playerGui
+		local blackFrame = Instance.new("Frame")
+		blackFrame.Size = UDim2.fromScale(1, 1)
+		blackFrame.BackgroundColor3 = Color3.new(0, 0, 0)
+		blackFrame.BorderSizePixel = 0
+		blackFrame.ZIndex = 2147483647
+		blackFrame.Parent = overlayGui
 	end
 end
 
-gh.gi:fv("Jungle Squat", gm)
-gh.gi:fv("Anti Lag", gy)
-
-local hr = {
-	hs = false,
-	ht = false,
-	hu = false
+local Toggles = {
+	AntiAfk = false,
+	MuscleFarm = false,
+	ProteinEgg = false,
+	AutoRejoin = false
 }
 
-gh.gi:fz("Anti AFK", function(hv)
-	hr.hs = hv
-	if hv then
-		task.spawn(function()
-			while hr.hs do
-				a.i:Button2Down(Vector2.new())
-				task.wait(0.08)
-				a.i:Button2Up(Vector2.new())
-				task.wait(299.92)
-			end
-		end)
-	end
-end)
-
-gh.gi:fz("Fast Farm", function(hw)
-	hr.ht = hw
-	if hw then
-		gs("Swift Samurai")
-		task.spawn(function()
-			local hx = 0
-			local hy
-			hy = a.d.Heartbeat:Connect(function()
-				if not hr.ht then
-					hy:Disconnect()
-					go()
-					return
-				end
-				local hz = tick()
-				if hz - hx >= 0 then
-					hx = hz
-					local ia = p.q:FindFirstChild("muscleEvent")
-					if ia then
-						for _ = 1, 32 do
-							pcall(function()
-								ia:FireServer("rep")
-							end)
-						end
-					end
-				end
-			end)
-		end)
-	else
-		go()
-	end
-end)
-
-gh.gi:fz("Auto Egg", function(ib)
-	hr.hu = ib
-	if ib then
-		task.spawn(function()
-			while hr.hu do
-				local ic = p.q.Character
-				local id = ic and ic:FindFirstChild("Protein Egg")
-				if not id then
-					local ie = p.q:FindFirstChild("Backpack")
-					id = ie and ie:FindFirstChild("Protein Egg")
-				end
-				if id then
-					local ig = p.q:FindFirstChild("muscleEvent")
-					if ig then
-						ig:FireServer("proteinEgg", id)
-					end
-				end
-				task.wait(1800)
-			end
-		end)
-	end
-end)
-
-local function ih(ii)
-	local ij = math.floor(ii / 60)
-	local ik = ii % 60
-	return string.format("%02d:%02d", ij, ik)
+local function startAntiAfk()
+	task.spawn(function()
+		while Toggles.AntiAfk do
+			Services.VirtualUser:Button2Down(Vector2.new())
+			task.wait(0.08)
+			Services.VirtualUser:Button2Up(Vector2.new())
+			task.wait(299.92)
+		end
+	end)
 end
 
-local function il()
-	local im = a.o:FindFirstChild("PerformanceStats")
-	local in_ = im and im:FindFirstChild("Ping")
-	return in_ and math.floor(in_:GetValue()) or 0
+local function startMuscleFarm()
+	equipPetsByName("Swift Samurai")
+	task.spawn(function()
+		local connection
+		connection = Services.RunService.Heartbeat:Connect(function()
+			if not Toggles.MuscleFarm then
+				connection:Disconnect()
+				unequipAllPets()
+				return
+			end
+			local muscleEvent = PlayerData.LocalPlayer:FindFirstChild("muscleEvent")
+			if muscleEvent then
+				for _ = 1, 32 do
+					pcall(function()
+						muscleEvent:FireServer("rep")
+					end)
+				end
+			end
+		end)
+	end)
 end
 
-local io = p.q.leaderstats:WaitForChild("Strength")
-local ip = p.q:WaitForChild("Durability")
-local iq = gh.gj:ft("Strength: 0 | Gained: 0")
-local ir = gh.gj:ft("Durability: 0 | Gained: 0")
-local is_ = gh.gj:ft("Str Pace: 0/H • 0/D • 0/M • 0/Y")
-local it = gh.gj:ft("Dura Pace: 0/H • 0/D • 0/M • 0/Y")
-local iu = gh.gj:ft("Egg Timer: 00:00")
-local iv = gh.gj:ft("Ping: 0 ms")
-local iw = io.Value
-local ix = ip.Value
-local iy = {}
-local iz = {}
-local ja = 10
+local function startProteinEgg()
+	task.spawn(function()
+		while Toggles.ProteinEgg do
+			local character = PlayerData.LocalPlayer.Character
+			local proteinEgg = character and character:FindFirstChild("Protein Egg")
+			if not proteinEgg then
+				local backpack = PlayerData.LocalPlayer:FindFirstChild("Backpack")
+				proteinEgg = backpack and backpack:FindFirstChild("Protein Egg")
+			end
+			if proteinEgg then
+				local muscleEvent = PlayerData.LocalPlayer:FindFirstChild("muscleEvent")
+				if muscleEvent then
+					muscleEvent:FireServer("proteinEgg", proteinEgg)
+				end
+			end
+			task.wait(1800)
+		end
+	end)
+end
 
-task.spawn(function()
-	local jb = tick()
-	while true do
-		local jc = tick()
-		local jd = io.Value
-		local je = ip.Value
-		iq.Text = "Strength: " .. bu.co(jd) .. " | Gained: " .. bu.co(jd - iw)
-		ir.Text = "Durability: " .. bu.co(je) .. " | Gained: " .. bu.co(je - ix)
-		local jf = p.q:FindFirstChild("boostTimersFolder")
-		if jf then
-			local jg = jf:FindFirstChild("Protein Egg")
-			if jg and jg:IsA("IntValue") then
-				iu.Text = "Egg Timer: " .. ih(jg.Value)
-			else
-				iu.Text = "Egg Timer: 00:00"
-			end
-		else
-			iu.Text = "Egg Timer: 00:00"
-		end
-		iv.Text = "Ping: " .. il() .. " ms"
-		table.insert(iy, {time = jc, value = jd})
-		table.insert(iz, {time = jc, value = je})
-		while #iy > 0 and jc - iy[1].time > ja do
-			table.remove(iy, 1)
-		end
-		while #iz > 0 and jc - iz[1].time > ja do
-			table.remove(iz, 1)
-		end
-		if jc - jb >= ja then
-			jb = jc
-			if #iy >= 2 then
-				local jh = iy[#iy].value - iy[1].value
-				local ji = jh / ja
-				is_.Text = "Str Pace: " .. bu.co(math.floor(ji * 3600)) .. "/H • " ..
-					bu.co(math.floor(ji * 86400)) .. "/D • " ..
-					bu.co(math.floor(ji * 2592000)) .. "/M • " ..
-					bu.co(math.floor(ji * 31536000)) .. "/Y"
-			end
-			if #iz >= 2 then
-				local jj = iz[#iz].value - iz[1].value
-				local jk = jj / ja
-				it.Text = "Dura Pace: " .. bu.co(math.floor(jk * 3600)) .. "/H • " ..
-					bu.co(math.floor(jk * 86400)) .. "/D • " ..
-					bu.co(math.floor(jk * 2592000)) .. "/M • " ..
-					bu.co(math.floor(jk * 31536000)) .. "/Y"
+local function startAutoRejoin()
+	task.spawn(function()
+		while Toggles.AutoRejoin do
+			task.wait(1800)
+			if Toggles.AutoRejoin then
+				pcall(function()
+					Services.TeleportService:Teleport(game.PlaceId, PlayerData.LocalPlayer)
+				end)
 			end
 		end
-		task.wait(0.01)
-	end
-end)
+	end)
+end
+
+task.wait(5)
+task.wait(0.175)
+pcall(teleportAndPressE)
+task.wait(0.175)
+Toggles.AntiAfk = true
+startAntiAfk()
+task.wait(0.175)
+Toggles.ProteinEgg = true
+startProteinEgg()
+task.wait(0.175)
+Toggles.MuscleFarm = true
+startMuscleFarm()
+task.wait(1)
+pcall(optimizeGame)
+Toggles.AutoRejoin = true
+startAutoRejoin()
