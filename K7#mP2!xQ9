@@ -771,8 +771,8 @@ local function gy()
 	end
 end
 
-gh.gi:fv("Anti Lag", gy)
 gh.gi:fv("Jungle Squat", gm)
+gh.gi:fv("Anti Lag", gy)
 
 local hr = {
 	hs = false,
