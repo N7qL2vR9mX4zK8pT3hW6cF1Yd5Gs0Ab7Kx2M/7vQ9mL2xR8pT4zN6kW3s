@@ -1,67 +1,36 @@
-local Services = {
-	Players = game:GetService("Players"),
-	ReplicatedStorage = game:GetService("ReplicatedStorage"),
-	RunService = game:GetService("RunService"),
-	VirtualInputManager = game:GetService("VirtualInputManager"),
-	VirtualUser = game:GetService("VirtualUser"),
-	TeleportService = game:GetService("TeleportService"),
-	Workspace = game:GetService("Workspace"),
-	Lighting = game:GetService("Lighting"),
-	MaterialService = game:GetService("MaterialService"),
-	SoundService = game:GetService("SoundService"),
-	ReplicatedFirst = game:GetService("ReplicatedFirst")
-}
-
-local PlayerData = {
-	LocalPlayer = Services.Players.LocalPlayer
-}
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local VirtualUser = game:GetService("VirtualUser")
+local TeleportService = game:GetService("TeleportService")
+local Workspace = game:GetService("Workspace")
+local Lighting = game:GetService("Lighting")
+local MaterialService = game:GetService("MaterialService")
+local SoundService = game:GetService("SoundService")
+local ReplicatedFirst = game:GetService("ReplicatedFirst")
+local LocalPlayer = Players.LocalPlayer
+local AntiAfk = false
+local MuscleFarm = false
+local ProteinEgg = false
+local AutoRejoin = false
 
 local function getHumanoidRootPart()
-	local character = PlayerData.LocalPlayer.Character or PlayerData.LocalPlayer.CharacterAdded:Wait()
+	local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 	return character:WaitForChild("HumanoidRootPart")
 end
 
 local function teleportAndPressE()
 	local rootPart = getHumanoidRootPart()
 	rootPart.CFrame = CFrame.new(-8372, 7, 2859)
-	task.wait(0.2)
-	Services.VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.E, false, game)
-	task.wait(0.01)
-	Services.VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.E, false, game)
-end
-
-local function unequipAllPets()
-	local petsFolder = PlayerData.LocalPlayer:FindFirstChild("petsFolder")
-	if not petsFolder then return end
-	for _, folder in pairs(petsFolder:GetChildren()) do
-		if folder:IsA("Folder") then
-			for _, pet in pairs(folder:GetChildren()) do
-				pcall(function()
-					Services.ReplicatedStorage.rEvents.equipPetEvent:FireServer("unequipPet", pet)
-				end)
-			end
-		end
-	end
-end
-
-local function equipPetsByName(petName, maxCount)
-	unequipAllPets()
-	local uniqueFolder = PlayerData.LocalPlayer.petsFolder and PlayerData.LocalPlayer.petsFolder:FindFirstChild("Unique")
-	if not uniqueFolder then return end
-	local equippedCount = 0
-	maxCount = maxCount or 8
-	for _, pet in pairs(uniqueFolder:GetChildren()) do
-		if pet.Name == petName and equippedCount < maxCount then
-			pcall(function()
-				Services.ReplicatedStorage.rEvents.equipPetEvent:FireServer("equipPet", pet)
-			end)
-			equippedCount += 1
-		end
-	end
+	task.wait(0.7)
+	VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.E, false, game)
+	task.wait(0.35)
+	VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.E, false, game)
 end
 
 local function optimizeGame()
-	local player = PlayerData.LocalPlayer
+	local player = LocalPlayer
 	if not player then return end
 	local playerGui = player:FindFirstChildOfClass("PlayerGui") or player:WaitForChild("PlayerGui", 5)
 	local character = player.Character
@@ -72,18 +41,14 @@ local function optimizeGame()
 		if character and (instance == character or instance:IsDescendantOf(character)) then return true end
 		local name = tostring(instance.Name)
 		if name == "rEvents"
-			or name == "equipPetEvent"
 			or name == "muscleEvent"
-			or name == "Protein Egg"
-			or name == "petsFolder"
-			or name == "Unique"
 			or name == "OptimizationOverlay" then
 			return true
 		end
 		if instance:IsA("RemoteEvent") or instance:IsA("RemoteFunction") or instance:IsA("BindableEvent") then
 			return true
 		end
-		if instance:IsDescendantOf(Services.ReplicatedStorage) and (name:find("Event") or name:find("Remote") or name == "rEvents") then
+		if instance:IsDescendantOf(ReplicatedStorage) and (name:find("Event") or name:find("Remote") or name == "rEvents") then
 			return true
 		end
 		return false
@@ -111,18 +76,18 @@ local function optimizeGame()
 			end
 		end
 	end
-	destroyUnnecessary(Services.Lighting)
+	destroyUnnecessary(Lighting)
 	pcall(function()
-		Services.Lighting.GlobalShadows = false
-		Services.Lighting.FogStart = 9e9
-		Services.Lighting.FogEnd = 9e9
-		Services.Lighting.Brightness = 0
-		Services.Lighting.EnvironmentDiffuseScale = 0
-		Services.Lighting.EnvironmentSpecularScale = 0
-		Services.Lighting.ExposureCompensation = -20
+		Lighting.GlobalShadows = false
+		Lighting.FogStart = 9e9
+		Lighting.FogEnd = 9e9
+		Lighting.Brightness = 0
+		Lighting.EnvironmentDiffuseScale = 0
+		Lighting.EnvironmentSpecularScale = 0
+		Lighting.ExposureCompensation = -20
 	end)
-	destroyUnnecessary(Services.MaterialService)
-	for _, sound in ipairs(Services.SoundService:GetDescendants()) do
+	destroyUnnecessary(MaterialService)
+	for _, sound in ipairs(SoundService:GetDescendants()) do
 		pcall(function()
 			if sound:IsA("Sound") then
 				sound:Stop()
@@ -130,14 +95,14 @@ local function optimizeGame()
 			end
 		end)
 	end
-	destroyUnnecessary(Services.SoundService)
-	pcall(function() Services.Workspace.Terrain:Clear() end)
-	destroyUnnecessary(Services.Workspace)
+	destroyUnnecessary(SoundService)
+	pcall(function() Workspace.Terrain:Clear() end)
+	destroyUnnecessary(Workspace)
 	task.wait(1)
-	destroyUnnecessary(Services.Workspace)
-	destroyUnnecessary(Services.ReplicatedStorage)
-	destroyUnnecessary(Services.ReplicatedFirst)
-	pcall(function() Services.RunService:Set3dRenderingEnabled(false) end)
+	destroyUnnecessary(Workspace)
+	destroyUnnecessary(ReplicatedStorage)
+	destroyUnnecessary(ReplicatedFirst)
+	pcall(function() RunService:Set3dRenderingEnabled(false) end)
 	local existingOverlay = playerGui and playerGui:FindFirstChild("OptimizationOverlay")
 	if existingOverlay then existingOverlay:Destroy() end
 	if playerGui then
@@ -157,35 +122,26 @@ local function optimizeGame()
 	end
 end
 
-local Toggles = {
-	AntiAfk = false,
-	MuscleFarm = false,
-	ProteinEgg = false,
-	AutoRejoin = false
-}
-
 local function startAntiAfk()
 	task.spawn(function()
-		while Toggles.AntiAfk do
-			Services.VirtualUser:Button2Down(Vector2.new())
+		while AntiAfk do
+			VirtualUser:Button2Down(Vector2.new())
 			task.wait(0.08)
-			Services.VirtualUser:Button2Up(Vector2.new())
+			VirtualUser:Button2Up(Vector2.new())
 			task.wait(299.92)
 		end
 	end)
 end
 
 local function startMuscleFarm()
-	equipPetsByName("Swift Samurai")
 	task.spawn(function()
 		local connection
-		connection = Services.RunService.Heartbeat:Connect(function()
-			if not Toggles.MuscleFarm then
+		connection = RunService.Heartbeat:Connect(function()
+			if not MuscleFarm then
 				connection:Disconnect()
-				unequipAllPets()
 				return
 			end
-			local muscleEvent = PlayerData.LocalPlayer:FindFirstChild("muscleEvent")
+			local muscleEvent = LocalPlayer:FindFirstChild("muscleEvent")
 			if muscleEvent then
 				for _ = 1, 32 do
 					pcall(function()
@@ -199,31 +155,28 @@ end
 
 local function startProteinEgg()
 	task.spawn(function()
-		while Toggles.ProteinEgg do
-			local character = PlayerData.LocalPlayer.Character
-			local proteinEgg = character and character:FindFirstChild("Protein Egg")
-			if not proteinEgg then
-				local backpack = PlayerData.LocalPlayer:FindFirstChild("Backpack")
-				proteinEgg = backpack and backpack:FindFirstChild("Protein Egg")
+		local character = LocalPlayer.Character
+		local proteinEgg = character and character:FindFirstChild("Protein Egg")
+		if not proteinEgg then
+			local backpack = LocalPlayer:FindFirstChild("Backpack")
+			proteinEgg = backpack and backpack:FindFirstChild("Protein Egg")
+		end
+		if proteinEgg then
+			local muscleEvent = LocalPlayer:FindFirstChild("muscleEvent")
+			if muscleEvent then
+				muscleEvent:FireServer("proteinEgg", proteinEgg)
 			end
-			if proteinEgg then
-				local muscleEvent = PlayerData.LocalPlayer:FindFirstChild("muscleEvent")
-				if muscleEvent then
-					muscleEvent:FireServer("proteinEgg", proteinEgg)
-				end
-			end
-			task.wait(1800)
 		end
 	end)
 end
 
 local function startAutoRejoin()
 	task.spawn(function()
-		while Toggles.AutoRejoin do
+		while AutoRejoin do
 			task.wait(1800)
-			if Toggles.AutoRejoin then
+			if AutoRejoin then
 				pcall(function()
-					Services.TeleportService:Teleport(game.PlaceId, PlayerData.LocalPlayer)
+					TeleportService:Teleport(game.PlaceId, LocalPlayer)
 				end)
 			end
 		end
@@ -234,15 +187,15 @@ task.wait(5)
 task.wait(0.175)
 pcall(teleportAndPressE)
 task.wait(0.175)
-Toggles.AntiAfk = true
+AntiAfk = true
 startAntiAfk()
 task.wait(0.175)
-Toggles.ProteinEgg = true
+ProteinEgg = true
 startProteinEgg()
 task.wait(0.175)
-Toggles.MuscleFarm = true
+MuscleFarm = true
 startMuscleFarm()
 task.wait(1)
 pcall(optimizeGame)
-Toggles.AutoRejoin = true
+AutoRejoin = true
 startAutoRejoin()
