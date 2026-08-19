@@ -838,7 +838,7 @@ local function createEsp(player, humanoid, character)
 	if character:FindFirstChild("ESP_BILLBOARD") then return end
 	local billboard = Instance.new("BillboardGui")
 	billboard.Name = "ESP_BILLBOARD"
-	billboard.Size = UDim2.new(5.5, 0, 2.05, 0)
+	billboard.Size = UDim2.new(5.5, 0, 2.25, 0)
 	billboard.StudsOffset = Vector3.new(0, 8.0, 0)
 	billboard.AlwaysOnTop = true
 	billboard.MaxDistance = 250
@@ -859,8 +859,8 @@ local function createEsp(player, humanoid, character)
 	stroke.Parent = frame
 	local nameLabel = Instance.new("TextLabel")
 	nameLabel.BackgroundTransparency = 1
-	nameLabel.Size = UDim2.new(1, -10, 0.34, 0)
-	nameLabel.Position = UDim2.new(0, 5, 0.04, 0)
+	nameLabel.Size = UDim2.new(1, -10, 0.30, 0)
+	nameLabel.Position = UDim2.new(0, 5, 0.03, 0)
 	nameLabel.TextColor3 = Color3.fromRGB(245, 245, 255)
 	nameLabel.Font = Enum.Font.PermanentMarker
 	nameLabel.TextScaled = true
@@ -874,8 +874,8 @@ local function createEsp(player, humanoid, character)
 	nameConstraint.Parent = nameLabel
 	local hpLabel = Instance.new("TextLabel")
 	hpLabel.BackgroundTransparency = 1
-	hpLabel.Size = UDim2.new(1, -10, 0.28, 0)
-	hpLabel.Position = UDim2.new(0, 5, 0.38, 0)
+	hpLabel.Size = UDim2.new(1, -10, 0.22, 0)
+	hpLabel.Position = UDim2.new(0, 5, 0.32, 0)
 	hpLabel.TextColor3 = Color3.fromRGB(60, 255, 140)
 	hpLabel.Font = Enum.Font.PermanentMarker
 	hpLabel.TextScaled = true
@@ -887,10 +887,34 @@ local function createEsp(player, humanoid, character)
 	hpConstraint.MaxTextSize = 15
 	hpConstraint.MinTextSize = 9
 	hpConstraint.Parent = hpLabel
+	local barBackground = Instance.new("Frame")
+	barBackground.Name = "HPBarBackground"
+	barBackground.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+	barBackground.BorderSizePixel = 0
+	barBackground.Size = UDim2.new(0.88, 0, 0.11, 0)
+	barBackground.Position = UDim2.new(0.06, 0, 0.555, 0)
+	barBackground.Parent = frame
+	local barBgCorner = Instance.new("UICorner")
+	barBgCorner.CornerRadius = UDim.new(0, 6)
+	barBgCorner.Parent = barBackground
+	local barFill = Instance.new("Frame")
+	barFill.Name = "HPBarFill"
+	barFill.BackgroundColor3 = Color3.fromRGB(60, 255, 140)
+	barFill.BorderSizePixel = 0
+	barFill.Size = UDim2.new(1, 0, 1, 0)
+	barFill.Parent = barBackground
+	local barFillCorner = Instance.new("UICorner")
+	barFillCorner.CornerRadius = UDim.new(0, 6)
+	barFillCorner.Parent = barFill
+	local barStroke = Instance.new("UIStroke")
+	barStroke.Thickness = 1.2
+	barStroke.Color = Color3.fromRGB(255, 255, 255)
+	barStroke.Transparency = 0.7
+	barStroke.Parent = barBackground
 	local dmgLabel = Instance.new("TextLabel")
 	dmgLabel.BackgroundTransparency = 1
-	dmgLabel.Size = UDim2.new(1, -10, 0.28, 0)
-	dmgLabel.Position = UDim2.new(0, 5, 0.66, 0)
+	dmgLabel.Size = UDim2.new(1, -10, 0.22, 0)
+	dmgLabel.Position = UDim2.new(0, 5, 0.70, 0)
 	dmgLabel.TextColor3 = Color3.fromRGB(255, 75, 75)
 	dmgLabel.Font = Enum.Font.PermanentMarker
 	dmgLabel.TextScaled = true
@@ -904,8 +928,29 @@ local function createEsp(player, humanoid, character)
 	dmgConstraint.Parent = dmgLabel
 	local function update()
 		if not (humanoid and humanoid.Parent) then return end
-		hpLabel.Text = "HP: " .. Utils.formatNumber(humanoid.Health) .. " / " .. Utils.formatNumber(humanoid.MaxHealth)
+		local health = humanoid.Health
+		local maxHealth = humanoid.MaxHealth
+		local pct = math.clamp(health / math.max(maxHealth, 1), 0, 1)
+		hpLabel.Text = "HP: " .. Utils.formatNumber(health) .. " / " .. Utils.formatNumber(maxHealth)
 		dmgLabel.Text = "DMG: " .. Utils.formatNumber(getEffectiveDamage(player))
+		barFill.Size = UDim2.new(pct, 0, 1, 0)
+		local color
+		if pct > 0.5 then
+			local t = (pct - 0.5) / 0.5
+			color = Color3.fromRGB(
+				math.floor(60 + (255 - 60) * (1 - t)),
+				255,
+				math.floor(140 * t)
+			)
+		else
+			local t = pct / 0.5
+			color = Color3.fromRGB(
+				255,
+				math.floor(255 * t),
+				0
+			)
+		end
+		barFill.BackgroundColor3 = color
 	end
 	humanoid.HealthChanged:Connect(update)
 	update()
