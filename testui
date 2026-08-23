@@ -1,3 +1,6 @@
+--plz dont skid this is my kitty
+
+
 local ui_options = {
 	main_color = Color3.fromRGB(41, 74, 122),
 	min_size = Vector2.new(400, 300),
@@ -85,7 +88,6 @@ local windowsFrame = Instance.new("Frame")
 local cloneref = cloneref and cloneref or function(...) return ... end
 local CoreGui= cloneref(game:GetService("CoreGui"))
 
-
 imgui.Name = "imgui"
 imgui.Parent = gethui and gethui() or (CoreGui or game.Players.LocalPlayer:WaitForChild("PlayerGui"))
 prefabs.Name = "Prefabs"
@@ -114,10 +116,9 @@ window.ClipsDescendants = true
 window.Position = UDim2.new(0, 20, 0, 20)
 window.Selectable = true
 window.Size = UDim2.new(0, 200, 0, 200)
-window.Image = "rbxassetid://110915576331965"
+window.Image = "rbxassetid://2851926732"
 window.ImageColor3 = Color3.new(0.0823529, 0.0862745, 0.0901961)
-window.ScaleType = Enum.ScaleType.Slice
-window.SliceCenter = Rect.new(12, 12, 12, 12)
+window.ScaleType = Enum.ScaleType.Stretch
 
 resizer.Name = "Resizer"
 resizer.Parent = window
@@ -133,7 +134,7 @@ bar.Parent = window
 bar.BackgroundColor3 = Color3.new(0.160784, 0.290196, 0.478431)
 bar.BorderSizePixel = 0
 bar.Position = UDim2.new(0, 0, 0, 5)
-bar.Size = UDim2.new(1, 0, 0, 15)
+bar.Size = UDim2.new(1, 0, 0, 20)
 
 toggle.Name = "Toggle"
 toggle.Parent = bar
@@ -143,7 +144,7 @@ toggle.Position = UDim2.new(0, 5, 0, -2)
 toggle.Rotation = 90
 toggle.Size = UDim2.new(0, 20, 0, 20)
 toggle.ZIndex = 2
-toggle.Image = "https://www.roblox.com/Thumbs/Asset.ashx?width=420&height=420&assetId=4731371541"
+toggle.Image = "rbxassetid://134779663895595"
 
 base.Name = "Base"
 base.Parent = bar
@@ -180,7 +181,7 @@ titleLabel.BackgroundColor3 = Color3.new(1, 1, 1)
 titleLabel.BackgroundTransparency = 1
 titleLabel.Position = UDim2.new(0, 30, 0, 3)
 titleLabel.Size = UDim2.new(0, 200, 0, 20)
-titleLabel.Font = Enum.Font.GothamBold
+titleLabel.Font = Enum.Font.PermanentMarker
 titleLabel.Text = "Gamer Time"
 titleLabel.TextColor3 = Color3.new(1, 1, 1)
 titleLabel.TextSize = 14
@@ -233,7 +234,7 @@ textBox.BackgroundTransparency = 1
 textBox.BorderSizePixel = 0
 textBox.Size = UDim2.new(1, 0, 0, 20)
 textBox.ZIndex = 2
-textBox.Font = Enum.Font.GothamSemibold
+textBox.Font = Enum.Font.PermanentMarker
 textBox.PlaceholderColor3 = Color3.new(0.698039, 0.698039, 0.698039)
 textBox.PlaceholderText = "Input Text"
 textBox.Text = ""
@@ -268,7 +269,7 @@ sliderTitle.BackgroundTransparency = 1
 sliderTitle.Position = UDim2.new(0.5, 0, 0.5, -10)
 sliderTitle.Size = UDim2.new(0, 0, 0, 20)
 sliderTitle.ZIndex = 2
-sliderTitle.Font = Enum.Font.GothamBold
+sliderTitle.Font = Enum.Font.PermanentMarker
 sliderTitle.Text = "Slider"
 sliderTitle.TextColor3 = Color3.new(0.784314, 0.784314, 0.784314)
 sliderTitle.TextSize = 14
@@ -299,7 +300,7 @@ textLabel.BackgroundColor3 = Color3.new(1, 1, 1)
 textLabel.BackgroundTransparency = 1
 textLabel.Position = UDim2.new(1, -20, -0.75, 0)
 textLabel.Size = UDim2.new(0, 26, 0, 50)
-textLabel.Font = Enum.Font.GothamBold
+textLabel.Font = Enum.Font.PermanentMarker
 textLabel.Text = "]"
 textLabel.TextColor3 = Color3.new(0.627451, 0.627451, 0.627451)
 textLabel.TextSize = 14
@@ -309,7 +310,7 @@ textLabel2.BackgroundColor3 = Color3.new(1, 1, 1)
 textLabel2.BackgroundTransparency = 1
 textLabel2.Position = UDim2.new(1, -65, -0.75, 0)
 textLabel2.Size = UDim2.new(0, 26, 0, 50)
-textLabel2.Font = Enum.Font.GothamBold
+textLabel2.Font = Enum.Font.PermanentMarker
 textLabel2.Text = "["
 textLabel2.TextColor3 = Color3.new(0.627451, 0.627451, 0.627451)
 textLabel2.TextSize = 14
@@ -334,10 +335,10 @@ dropdown.BorderSizePixel = 0
 dropdown.Position = UDim2.new(-0.055555556, 0, 0.0833333284, 0)
 dropdown.Size = UDim2.new(0, 200, 0, 20)
 dropdown.ZIndex = 2
-dropdown.Font = Enum.Font.GothamBold
+dropdown.Font = Enum.Font.PermanentMarker
 dropdown.Text = "      Dropdown"
 dropdown.TextColor3 = Color3.new(0.784314, 0.784314, 0.784314)
-dropdown.TextSize = 14
+dropdown.TextSize = 12
 dropdown.TextXAlignment = Enum.TextXAlignment.Left
 
 dropdownIndicator.Name = "Indicator"
@@ -393,7 +394,7 @@ tabButton.BorderSizePixel = 0
 tabButton.Position = UDim2.new(0.185185179, 0, 0, 0)
 tabButton.Size = UDim2.new(0, 71, 0, 20)
 tabButton.ZIndex = 2
-tabButton.Font = Enum.Font.GothamSemibold
+tabButton.Font = Enum.Font.PermanentMarker
 tabButton.Text = "Test tab"
 tabButton.TextColor3 = Color3.new(0.784314, 0.784314, 0.784314)
 tabButton.TextSize = 14
@@ -426,10 +427,10 @@ button.BackgroundTransparency = 1
 button.BorderSizePixel = 0
 button.Size = UDim2.new(1, 0, 0, 20)
 button.ZIndex = 2
-button.Font = Enum.Font.GothamSemibold
+button.Font = Enum.Font.PermanentMarker
 button.Text = "      Folder"
 button.TextColor3 = Color3.new(1, 1, 1)
-button.TextSize = 14
+button.TextSize = 12
 button.TextXAlignment = Enum.TextXAlignment.Left
 
 textButtonRoundify4px_3.Name = "TextButton_Roundify_4px"
@@ -691,7 +692,7 @@ switchButton.BorderSizePixel = 0
 switchButton.Position = UDim2.new(0.229411766, 0, 0.20714286, 0)
 switchButton.Size = UDim2.new(0, 20, 0, 20)
 switchButton.ZIndex = 2
-switchButton.Font = Enum.Font.SourceSans
+switchButton.Font = Enum.Font.PermanentMarker
 switchButton.Text = ""
 switchButton.TextColor3 = Color3.new(1, 1, 1)
 switchButton.TextSize = 18
@@ -713,7 +714,7 @@ title3Label.BackgroundColor3 = Color3.new(1, 1, 1)
 title3Label.BackgroundTransparency = 1
 title3Label.Position = UDim2.new(1.20000005, 0, 0, 0)
 title3Label.Size = UDim2.new(0, 20, 0, 20)
-title3Label.Font = Enum.Font.GothamSemibold
+title3Label.Font = Enum.Font.PermanentMarker
 title3Label.Text = "Switch"
 title3Label.TextColor3 = Color3.new(0.784314, 0.784314, 0.784314)
 title3Label.TextSize = 14
@@ -726,7 +727,7 @@ button2.BackgroundTransparency = 1
 button2.BorderSizePixel = 0
 button2.Size = UDim2.new(0, 91, 0, 20)
 button2.ZIndex = 2
-button2.Font = Enum.Font.GothamSemibold
+button2.Font = Enum.Font.PermanentMarker
 button2.TextColor3 = Color3.new(1, 1, 1)
 button2.TextSize = 14
 
@@ -767,7 +768,7 @@ title4Label.Parent = keybind
 title4Label.BackgroundColor3 = Color3.new(1, 1, 1)
 title4Label.BackgroundTransparency = 1
 title4Label.Size = UDim2.new(0, 0, 1, 0)
-title4Label.Font = Enum.Font.GothamBold
+title4Label.Font = Enum.Font.PermanentMarker
 title4Label.Text = "Keybind"
 title4Label.TextColor3 = Color3.new(0.784314, 0.784314, 0.784314)
 title4Label.TextSize = 14
@@ -781,7 +782,7 @@ inputButton.BorderSizePixel = 0
 inputButton.Position = UDim2.new(1, -85, 0, 2)
 inputButton.Size = UDim2.new(0, 80, 1, -4)
 inputButton.ZIndex = 2
-inputButton.Font = Enum.Font.GothamSemibold
+inputButton.Font = Enum.Font.PermanentMarker
 inputButton.Text = "RShift"
 inputButton.TextColor3 = Color3.new(0.784314, 0.784314, 0.784314)
 inputButton.TextSize = 12
@@ -889,7 +890,7 @@ local function gMouse()
 end
 
 local function ripple(button, x, y)
-	spawn(function()
+	task.spawn(function()
 		button.ClipsDescendants = true
 
 		local circle = prefabs:FindFirstChild("Circle"):Clone()
@@ -913,7 +914,7 @@ local function ripple(button, x, y)
 		circle:TweenSizeAndPosition(UDim2.new(0, size, 0, size), UDim2.new(0.5, -size / 2, 0.5, -size / 2), "Out", "Quad", 0.5, false, nil)
 		Resize(circle, {ImageTransparency = 1}, 0.5)
 
-		wait(0.5)
+		task.wait(0.5)
 		circle:Destroy()
 	end)
 end
@@ -964,7 +965,7 @@ function library:AddWindow(title, options)
 		local SplitFrame = Window:FindFirstChild("TabSelection"):FindFirstChild("Frame")
 		local Toggle = Bar:FindFirstChild("Toggle")
 
-		spawn(function()
+		task.spawn(function()
 			while true do
 				Bar.BackgroundColor3 = options.main_color
 				Base.BackgroundColor3 = options.main_color
@@ -990,7 +991,6 @@ function library:AddWindow(title, options)
 			Window.Draggable = false
 			if options.can_resize then
 				oldIcon = mouse.Icon
-				-- mouse.Icon = "http://www.roblox.com/asset?id=4745131330"
 			end
 			Entered = true
 		end)
@@ -1008,7 +1008,7 @@ function library:AddWindow(title, options)
 			if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
 				Held = true
 
-				spawn(function() -- Loop check
+				task.spawn(function() -- Loop check
 					if Entered and Resizer.Active and options.can_resize then
 						while Held and Resizer.Active do
 
@@ -1016,7 +1016,6 @@ function library:AddWindow(title, options)
 							local x = mouse_location.X - Window.AbsolutePosition.X
 							local y = mouse_location.Y - Window.AbsolutePosition.Y
 
-							--
 							if x >= options.min_size.X and y >= options.min_size.Y then
 								Resize(Window, {Size = UDim2.new(0, x, 0, y)}, options.tween_time)
 							elseif x >= options.min_size.X then
@@ -1052,8 +1051,6 @@ function library:AddWindow(title, options)
 				canopen = false
 
 				if open then
-					-- Close
-
 					oldwindowdata = {}
 					for i,v in pairs(Window:FindFirstChild("Tabs"):GetChildren()) do
 						oldwindowdata[v] = v.Visible
@@ -1068,8 +1065,6 @@ function library:AddWindow(title, options)
 					open_close.Parent:FindFirstChild("Base").Transparency = 1
 
 				else
-					-- Open
-
 					for i,v in pairs(oldwindowdata) do
 						i.Visible = v
 					end
@@ -1083,7 +1078,7 @@ function library:AddWindow(title, options)
 				end
 
 				open = not open
-				wait(options.tween_time)
+				task.wait(options.tween_time)
 				canopen = true
 
 			end
@@ -1164,7 +1159,7 @@ function library:AddWindow(title, options)
 						button.ZIndex = button.ZIndex + (windows * 10)
 						button:GetChildren()[1].ZIndex = button:GetChildren()[1].ZIndex + (windows * 10)
 
-						spawn(function()
+						task.spawn(function()
 							while true do
 								if button and button:GetChildren()[1] then
 									button:GetChildren()[1].ImageColor3 = options.main_color
@@ -1196,7 +1191,7 @@ function library:AddWindow(title, options)
 						switch.ZIndex = switch.ZIndex + (windows * 10)
 						switch:GetChildren()[1].ZIndex = switch:GetChildren()[1].ZIndex + (windows * 10)
 
-						spawn(function()
+						task.spawn(function()
 							while true do
 								if switch and switch:GetChildren()[1] then
 									switch:GetChildren()[1].ImageColor3 = options.main_color
@@ -1292,7 +1287,7 @@ function library:AddWindow(title, options)
 								if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
 									Held = true
 
-									spawn(function() -- Loop check
+									task.spawn(function() -- Loop check
 										if Entered and not slider_options.readonly then
 											while Held and (not dropdown_open) do
 												local mouse_location = gMouse()
@@ -1361,25 +1356,25 @@ function library:AddWindow(title, options)
 						local keybind_data = {}
 
 						keybind_name = tostring(keybind_name or "New Keybind")
-						callback = typeof(callback) == "function" and callback or function()end
+						callback = typeof(callback) == "function" and callback or function() end
 						keybind_options = typeof(keybind_options) == "table" and keybind_options or {}
 						keybind_options = {
 							["standard"] = keybind_options.standard or Enum.KeyCode.RightShift,
 						}
 
-						local keybind = prefabs:FindFirstChild("Keybind"):Clone()
-						local input = keybind:FindFirstChild("Input")
-						local title = keybind:FindFirstChild("Title")
-						keybind.ZIndex = keybind.ZIndex + (windows * 10)
+						local keybindFrame = prefabs:FindFirstChild("Keybind"):Clone()
+						local input = keybindFrame:FindFirstChild("Input")
+						local title = keybindFrame:FindFirstChild("Title")
+						keybindFrame.ZIndex = keybindFrame.ZIndex + (windows * 10)
 						input.ZIndex = input.ZIndex + (windows * 10)
 						input:GetChildren()[1].ZIndex = input:GetChildren()[1].ZIndex + (windows * 10)
 						title.ZIndex = title.ZIndex + (windows * 10)
 
-						keybind.Parent = new_tab
+						keybindFrame.Parent = new_tab
 						title.Text = "  " .. keybind_name
-						keybind.Size = UDim2.new(0, gNameLen(title) + 80, 0, 20)
+						keybindFrame.Size = UDim2.new(0, gNameLen(title) + 80, 0, 20)
 
-						local shortkeys = { -- thanks to stroketon for helping me out with this
+						local shortkeys = {
 							RightControl = 'RightCtrl',
 							LeftControl = 'LeftCtrl',
 							LeftShift = 'LShift',
@@ -1388,24 +1383,25 @@ function library:AddWindow(title, options)
 							MouseButton2 = "Mouse2"
 						}
 
-						local keybind = keybind_options.standard
+						local currentKey = keybind_options.standard
 
 						function keybind_data:SetKeybind(Keybind)
+							if typeof(Keybind) ~= "EnumItem" then return end
 							local key = shortkeys[Keybind.Name] or Keybind.Name
 							input.Text = key
-							keybind = Keybind
+							currentKey = Keybind
 						end
 
 						UIS.InputBegan:Connect(function(a, b)
 							if checks.binding then
-								spawn(function()
-									wait()
+								task.spawn(function()
+									task.wait()
 									checks.binding = false
 								end)
 								return
 							end
-							if a.KeyCode == keybind and not b then
-								pcall(callback, keybind)
+							if a.KeyCode == currentKey and not b then
+								pcall(callback, currentKey)
 							end
 						end)
 
@@ -1415,11 +1411,16 @@ function library:AddWindow(title, options)
 							if checks.binding then return end
 							input.Text = "..."
 							checks.binding = true
-							local a, b = UIS.InputBegan:Wait()
-							keybind_data:SetKeybind(a.KeyCode)
+							local a = UIS.InputBegan:Wait()
+							if a.KeyCode and a.KeyCode ~= Enum.KeyCode.Unknown then
+								keybind_data:SetKeybind(a.KeyCode)
+							else
+								keybind_data:SetKeybind(currentKey)
+							end
+							checks.binding = false
 						end)
 
-						return keybind_data, keybind
+						return keybind_data, keybindFrame
 					end
 
 					function tab_data:AddDropdown(dropdown_name, callback)
@@ -1468,7 +1469,7 @@ function library:AddWindow(title, options)
 							local object_data = {}
 							n = tostring(n or "New Object")
 
-local object = prefabs:FindFirstChild("DropdownButton"):Clone()
+							local object = prefabs:FindFirstChild("DropdownButton"):Clone()
 
 							object.Parent = objects
 							object.Text = n
@@ -1573,7 +1574,7 @@ local object = prefabs:FindFirstChild("DropdownButton"):Clone()
 								if inputObject.UserInputType == Enum.UserInputType.MouseButton1 then
 									Held = true
 
-									spawn(function() -- Loop check
+									task.spawn(function() -- Loop check
 										while Held and Entered1 and (not dropdown_open) do -- Palette
 											local mouse_location = gMouse()
 
@@ -1827,89 +1828,66 @@ local object = prefabs:FindFirstChild("DropdownButton"):Clone()
 								return A
 							end
 
-                            local function highlight_logs(s)
-                                local result = s
-                                for _, name in ipairs({"print","warn","error","console.log"}) do
-                                    local pat = name:gsub("%.", "%%.")
-                                    result = result:gsub(pat .. "%s*%b()", '<font color="rgb(130,255,170)">%0</font>')
-                                end
-                                return result
-                            end
-
-							local highlight_lua = function(type)
-								if type == "Text" then
-									Source.Text = Source.Text:gsub("\13", "")
-									Source.Text = Source.Text:gsub("\t", "      ")
-									local s = Source.Text
-
-									Source.Keywords.Text = Highlight(s, lua_keywords)
-									Source.Globals.Text = Highlight(s, global_env)
-									Source.RemoteHighlight.Text = Highlight(s, {"FireServer", "fireServer", "InvokeServer", "invokeServer"})
-									Source.Tokens.Text = hTokens(s)
-									Source.Numbers.Text = numbers(s)
-									Source.Strings.Text = strings(s)
-									Source.Comments.Text = comments(s)
-
-									local lin = 1
-									s:gsub("\n", function()
-										lin = lin + 1
-									end)
-
-									Lines.Text = ""
-									for i = 1, lin do
-										Lines.Text = Lines.Text .. i .. "\n"
-									end
-
-									sf.CanvasSize = UDim2.new(0, 0, lin * 0.153846154, 0)
+							local function updateLineNumbers(s)
+								local lin = 1
+								s:gsub("\n", function()
+									lin = lin + 1
+								end)
+								Lines.Text = ""
+								for i = 1, lin do
+									Lines.Text = Lines.Text .. i .. "\n"
 								end
+								sf.CanvasSize = UDim2.new(0, 0, lin * 0.153846154, 0)
+							end
 
-								local highlight_logs = function(type)
-                                    if type == "Text" then
-                                        Source.Text = Source.Text:gsub("\13", "")
-                                        Source.Text = Source.Text:gsub("\t", "      ")
-                                        local s = Source.Text
-                                        Source.Keywords.Text     = Highlight(s, lua_keywords)
-                                        Source.Globals.Text      = Highlight(s, global_env)
-                                        Source.RemoteHighlight.Text = Highlight(s, {"FireServer", "fireServer", "InvokeServer", "invokeServer"})
-                                        Source.Tokens.Text       = hTokens(s)
-                                        Source.Numbers.Text      = numbers(s)
-                                        Source.Strings.Text      = strings(s)
-                                        Source.Comments.Text     = comments(s)
-                                        Source.Logs.Text = highlight_logs(s)
-                                        local lin = 1
-                                        s:gsub("\n", function() lin = lin + 1 end)
-                                        Lines.Text = ""
-                                        for i = 1, lin do
-                                            Lines.Text = Lines.Text .. i .. "\n"
-                                        end
+							local function highlight_lua()
+								Source.Text = Source.Text:gsub("\13", ""):gsub("\t", "      ")
+								local s = Source.Text
 
-                                        sf.CanvasSize = UDim2.new(0, 0, lin * 0.153846154, 0)
-                                    end
-								end
-								if type == "Text" then
-									Source.Text = Source.Text:gsub("\13", "")
-									Source.Text = Source.Text:gsub("\t", "      ")
-									local s = Source.Text
+								Source.Keywords.Text = Highlight(s, lua_keywords)
+								Source.Globals.Text = Highlight(s, global_env)
+								Source.RemoteHighlight.Text = Highlight(s, {"FireServer", "fireServer", "InvokeServer", "invokeServer"})
+								Source.Tokens.Text = hTokens(s)
+								Source.Numbers.Text = numbers(s)
+								Source.Strings.Text = strings(s)
+								Source.Comments.Text = comments(s)
+								Source.Info.Text = info(s)
 
-									Source.Info.Text = info(s)
+								updateLineNumbers(s)
+							end
 
-									local lin = 1
-									s:gsub("\n", function()
-										lin = lin + 1
-									end)
+							local function highlight_logs()
+								Source.Text = Source.Text:gsub("\13", ""):gsub("\t", "      ")
+								local s = Source.Text
 
-									sf.CanvasSize = UDim2.new(0, 0, lin * 0.153846154, 0)
-								end
+								-- Simple highlighting for log mode (no full Lua syntax)
+								Source.Keywords.Text = ""
+								Source.Globals.Text = ""
+								Source.RemoteHighlight.Text = ""
+								Source.Tokens.Text = ""
+								Source.Numbers.Text = numbers(s)
+								Source.Strings.Text = strings(s)
+								Source.Comments.Text = comments(s)
+								Source.Info.Text = info(s)
+
+								updateLineNumbers(s)
 							end
 
 							if console_options.source == "Lua" then
-								highlight_lua("Text")
-								Source.Changed:Connect(highlight_lua)
+								highlight_lua()
+								Source.Changed:Connect(function(prop)
+									if prop == "Text" then
+										highlight_lua()
+									end
+								end)
 							elseif console_options.source == "Logs" then
 								Lines.Visible = false
-
-								highlight_logs("Text")
-								Source.Changed:Connect(highlight_logs)
+								highlight_logs()
+								Source.Changed:Connect(function(prop)
+									if prop == "Text" then
+										highlight_logs()
+									end
+								end)
 							end
 
 							function console_data:Set(code)
@@ -1971,7 +1949,7 @@ local object = prefabs:FindFirstChild("DropdownButton"):Clone()
 						folder.Parent = new_tab
 						button.Text = "      " .. folder_name
 
-						spawn(function()
+						task.spawn(function()
 							while true do
 								if button and button:GetChildren()[1] then
 									button:GetChildren()[1].ImageColor3 = options.main_color
@@ -2003,7 +1981,7 @@ local object = prefabs:FindFirstChild("DropdownButton"):Clone()
 							open = not open
 						end)
 
-						spawn(function()
+						task.spawn(function()
 							while true do
 								Resize(folder, {Size = UDim2.new(1, 0, 0, (open and gFolderLen() or 20))}, options.tween_time)
 								wait()
@@ -2047,5 +2025,4 @@ local object = prefabs:FindFirstChild("DropdownButton"):Clone()
 
 	return window_data, Window
 end
-
 return library
